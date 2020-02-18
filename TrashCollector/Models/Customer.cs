@@ -19,6 +19,8 @@ namespace TrashCollector.Models
         public int ZipCode { get; set; }
         public int Balance { get; set; }
         public string PickUpDay { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public bool Suspend { get; set; }
 
         [ForeignKey("IdentityUser")]
