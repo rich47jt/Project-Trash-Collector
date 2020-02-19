@@ -19,7 +19,6 @@ namespace TrashCollector.Models
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
-        [ForeignKey("Pick Ups")]
-        public DateTime PickUp { get; set; }
+       
     }
 }
