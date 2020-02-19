@@ -12,7 +12,6 @@ namespace TrashCollector.Models
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name = "Name")]
         public string Name { get; set; }
         public int ZipCode { get; set; }
 
@@ -20,5 +19,7 @@ namespace TrashCollector.Models
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
+        [ForeignKey("Pick Ups")]
+        public DateTime PickUp { get; set; }
     }
 }
