@@ -20,7 +20,17 @@ namespace TrashCollector.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if(User.IsInRole("Customer"))
+            { 
+                return RedirectToAction("Index","Customers");
+
+            }
+            else if (User.IsInRole("Employee"))
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+            return Redirect("/Identity/Account/Login");
+           
         }
 
         public IActionResult Privacy()
