@@ -69,6 +69,18 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+        public IActionResult Add_PickUp([Bind("PickUp")]Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(customer.Pickup);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            return View(customer);
+        }
+
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -157,32 +169,7 @@ namespace TrashCollector.Controllers
             return _context.Customers.Any(e => e.Id == id);
         }
 
-        public IActionResult PickUps (Customer customer,string collection)
-        {
-            
-            switch(collection)
-            {
-                case "create pickup":
-                    var pickups = customer;
-                    _context.Customers.Where(c => c.Pickup == pickups.Pickup);
-                    _context.SaveChanges();
-                    return View(pickups);
-                
-                case "Delete pickup":
-                    var delepickup = customer;
-                    _context.Customers.Where(c => c.Pickup == delepickup.Pickup);
-                    _context.Remove(customer.Pickup);
-                    _context.SaveChanges();
-                    return View(delepickup);
-                    
-                case "Edit pickup":
-                    var editpickup = customer;
-                    _context.Customers.Where(c => c.Pickup == editpickup.Pickup);
-                    _context.SaveChanges();
-                    return View(editpickup);
+        
 
-            }
-            return RedirectToAction("Index");
-        }
     }
 }
