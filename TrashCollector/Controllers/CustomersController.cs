@@ -57,7 +57,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StreetAddress,City,Balance,ZipCode,PickUpDay,Start,End,Suspend,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,StreetAddress,City,ZipCode,Suspend,IdentityUserId,Pickup,Balance")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StreetAddress,City,Balance,ZipCode,PickUpDay,Start,End,Suspend,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StreetAddress,City,ZipCode,Suspend,IdentityUserId,Pickup,Balance")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -155,6 +155,34 @@ namespace TrashCollector.Controllers
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.Id == id);
+        }
+
+        public IActionResult PickUps (Customer customer,string collection)
+        {
+            
+            switch(collection)
+            {
+                case "create pickup":
+                    var pickups = customer;
+                    _context.Customers.Where(c => c.Pickup == pickups.Pickup);
+                    _context.SaveChanges();
+                    return View(pickups);
+                
+                case "Delete pickup":
+                    var delepickup = customer;
+                    _context.Customers.Where(c => c.Pickup == delepickup.Pickup);
+                    _context.Remove(customer.Pickup);
+                    _context.SaveChanges();
+                    return View(delepickup);
+                    
+                case "Edit pickup":
+                    var editpickup = customer;
+                    _context.Customers.Where(c => c.Pickup == editpickup.Pickup);
+                    _context.SaveChanges();
+                    return View(editpickup);
+
+            }
+            return RedirectToAction("Index");
         }
     }
 }

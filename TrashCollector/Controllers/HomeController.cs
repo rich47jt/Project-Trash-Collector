@@ -27,7 +27,7 @@ namespace TrashCollector.Controllers
             }
             else if (User.IsInRole("Employee"))
             {
-                return RedirectToAction("Index", "Employee");
+                return RedirectToAction("Index","Employees");
             }
             return Redirect("/Identity/Account/Login");
            
