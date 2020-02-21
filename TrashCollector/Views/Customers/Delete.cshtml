@@ -37,6 +37,12 @@
             @Html.DisplayFor(model => model.ZipCode)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Suspend)
         </dt>
         <dd class = "col-sm-10">
@@ -47,12 +53,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IdentityUser.Id)
-        </dd class>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.account)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.account.AccountId)
         </dd class>
     </dl>
     

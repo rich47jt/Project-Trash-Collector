@@ -18,15 +18,14 @@ namespace TrashCollector.Models
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public int ZipCode { get; set; }
+        public double Balance { get; set; }
         public bool Suspend { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
-        [ForeignKey("Account")]
-        public int AccountId { get; set; }
-        public Account account { get; set; }
+        
             
 
         
