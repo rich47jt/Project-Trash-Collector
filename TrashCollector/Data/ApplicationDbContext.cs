@@ -24,7 +24,8 @@ namespace TrashCollector.Data
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Customer", NormalizedName = "CUSTOMER" });
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
         }
-        public DbSet<TrashCollector.Models.PickUp> PickUp { get; set; }
+        public DbSet<PickUp> PickUps { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
    
 }

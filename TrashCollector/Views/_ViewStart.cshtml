@@ -1,4 +1,13 @@
 ﻿@{
+    if(User.IsInRole("Customer"))
+    {
+        Layout = "_CustomerLayout";
+
+    }
+    else if (User.IsInRole("Employee"))
+    {
+        Layout = "_EmployeeLayout";
+    }
     Layout = "_Layout";
-    
+
 }

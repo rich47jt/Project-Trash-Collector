@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TrashCollector: Customeer Page</title>
+    <title>@ViewData["Title"] = TrashCollector: Customeer Page</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -20,19 +20,13 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Customer">Index</a>
+                            <a class="nav-link text-dark"  asp-controller="Customers" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Details" asp-action="Customer">Index</a>
+                            <a class="nav-link text-dark"  asp-controller="PickUps" asp-action="Index">PickUps</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Set-Up" asp-action="Customer">PickUps</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Balance" asp-action="Customer">Balance</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pick-Ups" asp-action="Customer">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Accounts" asp-action="Index"> Balance</a>
                         </li>
                     </ul>
                 </div>

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 <h1>Index</h1>
@@ -27,12 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Suspend)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pickup)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Balance)
             </th>
@@ -56,12 +52,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Suspend)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pickup)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Balance)

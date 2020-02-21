@@ -10,90 +10,85 @@ using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
-    public class CustomersController : Controller
+    public class PickUpsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CustomersController(ApplicationDbContext context)
+        public PickUpsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Customers
+        // GET: PickUps
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.PickUps.ToListAsync());
         }
 
-        // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: PickUps/Details/5
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            var pickUp = await _context.PickUps
+                .FirstOrDefaultAsync(m => m.PickUpDay == id);
+            if (pickUp == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(pickUp);
         }
 
-        // GET: Customers/Create
+        // GET: PickUps/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Customers/Create
+        // POST: PickUps/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StreetAddress,City,ZipCode,Suspend,IdentityUserId,Balance")] Customer customer)
+        public async Task<IActionResult> Create([Bind("PickUpDay,Start,End,IsPickUp")] PickUp pickUp)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                _context.Add(pickUp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            return View(pickUp);
         }
 
-        // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: PickUps/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
+            var pickUp = await _context.PickUps.FindAsync(id);
+            if (pickUp == null)
             {
                 return NotFound();
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            return View(pickUp);
         }
 
-        // POST: Customers/Edit/5
+        // POST: PickUps/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StreetAddress,City,ZipCode,Suspend,IdentityUserId,Balance")] Customer customer)
+        public async Task<IActionResult> Edit(string id, [Bind("PickUpDay,Start,End,IsPickUp")] PickUp pickUp)
         {
-            if (id != customer.Id)
+            if (id != pickUp.PickUpDay)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
+                    _context.Update(pickUp);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!PickUpExists(pickUp.PickUpDay))
                     {
                         return NotFound();
                     }
@@ -118,43 +113,41 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            return View(pickUp);
         }
 
-        // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: PickUps/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            var pickUp = await _context.PickUps
+                .FirstOrDefaultAsync(m => m.PickUpDay == id);
+            if (pickUp == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(pickUp);
         }
 
-        // POST: Customers/Delete/5
+        // POST: PickUps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
+            var pickUp = await _context.PickUps.FindAsync(id);
+            _context.PickUps.Remove(pickUp);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int id)
+        private bool PickUpExists(string id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.PickUps.Any(e => e.PickUpDay == id);
         }
     }
 }

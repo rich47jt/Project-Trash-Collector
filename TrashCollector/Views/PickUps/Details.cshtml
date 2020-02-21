@@ -1,4 +1,4 @@
-﻿@model TrashCollector.Models.Employee
+﻿@model TrashCollector.Models.PickUp
 
 @{
     ViewData["Title"] = "Details";
@@ -8,30 +8,30 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Employee</h4>
+    <h4>PickUp</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Start)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Start)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ZipCode)
+            @Html.DisplayNameFor(model => model.End)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ZipCode)
+            @Html.DisplayFor(model => model.End)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdentityUser)
+            @Html.DisplayNameFor(model => model.IsPickUp)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdentityUser.Id)
+            @Html.DisplayFor(model => model.IsPickUp)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.PickUpDay">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
