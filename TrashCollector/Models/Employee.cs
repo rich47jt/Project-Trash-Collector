@@ -11,6 +11,7 @@ namespace TrashCollector.Models
     public class Employee
     {
         [Key]
+        [Display(Name = "Name")]
         public int Id { get; set; }
         public string Name { get; set; }
         public int ZipCode { get; set; }

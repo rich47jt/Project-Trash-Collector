@@ -26,7 +26,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -34,7 +34,7 @@ namespace TrashCollector.Controllers
             }
 
             var pickUp = await _context.PickUps
-                .FirstOrDefaultAsync(m => m.PickUpDay == id);
+                .FirstOrDefaultAsync(m => m.PickUpId == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PickUpDay,Start,End,IsPickUp")] PickUp pickUp)
+        public async Task<IActionResult> Create([Bind("PickUpId,PickUpDay,Start,End,Id")] PickUp pickUp)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -86,9 +86,9 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("PickUpDay,Start,End,IsPickUp")] PickUp pickUp)
+        public async Task<IActionResult> Edit(int id, [Bind("PickUpId,PickUpDay,Start,End,Id")] PickUp pickUp)
         {
-            if (id != pickUp.PickUpDay)
+            if (id != pickUp.PickUpId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace TrashCollector.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PickUpExists(pickUp.PickUpDay))
+                    if (!PickUpExists(pickUp.PickUpId))
                     {
                         return NotFound();
                     }
@@ -117,7 +117,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -125,7 +125,7 @@ namespace TrashCollector.Controllers
             }
 
             var pickUp = await _context.PickUps
-                .FirstOrDefaultAsync(m => m.PickUpDay == id);
+                .FirstOrDefaultAsync(m => m.PickUpId == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -137,7 +137,7 @@ namespace TrashCollector.Controllers
         // POST: PickUps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var pickUp = await _context.PickUps.FindAsync(id);
             _context.PickUps.Remove(pickUp);
@@ -145,9 +145,9 @@ namespace TrashCollector.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PickUpExists(string id)
+        private bool PickUpExists(int id)
         {
-            return _context.PickUps.Any(e => e.PickUpDay == id);
+            return _context.PickUps.Any(e => e.PickUpId == id);
         }
     }
 }

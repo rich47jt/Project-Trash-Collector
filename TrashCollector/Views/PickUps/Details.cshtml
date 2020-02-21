@@ -12,6 +12,12 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PickUpDay)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PickUpDay)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Start)
         </dt>
         <dd class = "col-sm-10">
@@ -24,14 +30,14 @@
             @Html.DisplayFor(model => model.End)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPickUp)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPickUp)
+            @Html.DisplayFor(model => model.Id)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PickUpDay">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.PickUpId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

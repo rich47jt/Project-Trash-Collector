@@ -24,9 +24,10 @@ namespace TrashCollector.Models
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
-
         [ForeignKey("Account")]
-        public double Balance { get; set; }
+        public int AccountId { get; set; }
+        public Account account { get; set; }
+            
 
         
     
