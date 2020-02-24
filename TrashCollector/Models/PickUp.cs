@@ -12,12 +12,17 @@ namespace TrashCollector.Models
         [Key]
         public int PickUpId { get; set; }
         public string PickUpDay { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public bool IsPickUp { get; set; }
+        public double Balance { get; set; }
+        public bool Suspend { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         
         [ForeignKey("Customer")]
         public int Id { get; set; }
         public Customer customer { get; set; }
+
+        
         
     }
 }
