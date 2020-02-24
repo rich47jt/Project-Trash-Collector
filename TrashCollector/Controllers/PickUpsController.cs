@@ -165,6 +165,22 @@ namespace TrashCollector.Controllers
             return _context.PickUps.Any(e => e.PickUpId == id && e.customer == thiscusomter);
         }
 
+        public IActionResult Balance(int id,PickUp pickup)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            var balance = _context.PickUps.Where(c => c.customer == thiscusomter && c.PickUpId == id);
+            if (pickup.IsPickUp == true)
+            {
+                //increase balance 
+            }
+            if(pickup.Suspend == true)
+            {
+                
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
     }
 }
