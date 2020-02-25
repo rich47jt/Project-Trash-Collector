@@ -181,24 +181,7 @@ namespace TrashCollector.Controllers
             return _context.PickUps.Any(e => e.PickUpId == id);
         }
 
-        //public IActionResult Suspend( PickUp pickUp)
-        //{
-        //    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-        //    var suspendedcustomer = _context.PickUps.Where(p => p.customer == thiscusomter);
-        //    if (pickUp.Suspend == true)
-        //    {
-                
-        //        suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == false);
-        //        _context.SaveChanges();    
-        //        return RedirectToAction("Index");
-        //    }
-        //    else
-        //    {
-        //        suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == true);
-        //        return RedirectToAction("Index");
-        //    }
-       // }
+       
    
     }
 }

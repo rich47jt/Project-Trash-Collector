@@ -162,7 +162,7 @@ namespace TrashCollector.Controllers
             return _context.Employees.Any(e => e.Id == id);
         }
         
-        public IActionResult Find( )
+        public IActionResult Find()
         {
            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
            var thisemployee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
