@@ -21,26 +21,25 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return View(await _context.PickUps.Where(c => c.customer == thiscusomter).ToListAsync());
+            return View(_context.PickUps.Where(p => p.CustomerId == thiscusomter.Id));
         }
 
         // GET: PickUps/Details/5
-        public async Task <IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
-            
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            var pickUp = await _context.PickUps.FirstOrDefaultAsync(m => m.PickUpId == id && m.customer == thiscusomter);
-  
+            var pickUp = await _context.PickUps
+                .Where( p=> p.customer == thiscusomter)
+                .FirstOrDefaultAsync(m => m.PickUpId == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -50,11 +49,12 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return View(_context.PickUps.Where(p => p.customer == thiscusomter));
+            
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            return View();
         }
 
         // POST: PickUps/Create
@@ -62,13 +62,19 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,Id")] PickUp pickUp)
+        public async Task<IActionResult> Create([Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,CustomerId")] PickUp pickUp)
         {
+            if (pickUp.IsPickUp == false)
+            {
+                pickUp.Balance = 0;
+            }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            pickUp.customer = thiscusomter;
+            pickUp.CustomerId = thiscusomter.Id;
             if (ModelState.IsValid)
             {
+             
+
                 _context.Add(pickUp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -77,7 +83,8 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Edit/5
-        public IActionResult Edit(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -85,11 +92,13 @@ namespace TrashCollector.Controllers
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            var pickUp = _context.PickUps.Where(c => c.Id == id && c.customer == thiscusomter);
+            id = thiscusomter.Id;
+            var pickUp = await _context.PickUps.FindAsync(id);
             if (pickUp == null)
             {
                 return NotFound();
             }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", pickUp.CustomerId);
             return View(pickUp);
         }
 
@@ -98,11 +107,11 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,Id")] PickUp pickUp)
+        public async Task<IActionResult> Edit(int id, [Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,CustomerId")] PickUp pickUp)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            pickUp = _context.PickUps.Where(p => p.customer == thiscusomter).FirstOrDefault();
+            pickUp.customer = thiscusomter;
             if (id != pickUp.PickUpId)
             {
                 return NotFound();
@@ -128,10 +137,12 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", pickUp.CustomerId);
             return View(pickUp);
         }
 
         // GET: PickUps/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +152,8 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             var pickUp = await _context.PickUps
-                .FirstOrDefaultAsync(m => m.PickUpId == id && m.customer == thiscusomter);
+                .Where(p => p.customer == thiscusomter)
+                .FirstOrDefaultAsync(m => m.PickUpId == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -154,9 +166,11 @@ namespace TrashCollector.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {   var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            var pickUp = await _context.PickUps.Where(p => p.PickUpId == id && p.customer == thiscusomter).FirstAsync();
+        {
+            //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            
+            var pickUp = await _context.PickUps.FindAsync(id);
             _context.PickUps.Remove(pickUp);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -164,34 +178,27 @@ namespace TrashCollector.Controllers
 
         private bool PickUpExists(int id)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return _context.PickUps.Select(e => e.PickUpId == id && e.customer == thiscusomter).FirstOrDefault();
+            return _context.PickUps.Any(e => e.PickUpId == id);
         }
 
-
-        public IActionResult Suspend(int id, PickUp pickUp)
-        { 
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            var suspendedcustomer = _context.PickUps.Where(p => p.customer == thiscusomter && p.PickUpId == id);
-            if (pickUp.Suspend == true)
-            {
-                _context.PickUps.Find(id);
-                suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == false);
-                //write cusotmer is suspended account 
-                //display end and start date 
-                //default?
-            }
-            else
-            {
-                suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == true);
-
-            }
-            return RedirectToAction("IndexAsync");
-        }
-
-        
-
+        //public IActionResult Suspend( PickUp pickUp)
+        //{
+        //    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+        //    var suspendedcustomer = _context.PickUps.Where(p => p.customer == thiscusomter);
+        //    if (pickUp.Suspend == true)
+        //    {
+                
+        //        suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == false);
+        //        _context.SaveChanges();    
+        //        return RedirectToAction("Index");
+        //    }
+        //    else
+        //    {
+        //        suspendedcustomer = _context.PickUps.Where(p => p.IsPickUp == true);
+        //        return RedirectToAction("Index");
+        //    }
+       // }
+   
     }
 }

@@ -15,15 +15,13 @@ namespace TrashCollector.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int ZipCode { get; set; }
-
-        //public bool confirmation{get; set;}
-        //-may need to have employee confirm pickups 
-        
+        public bool Confirmation { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
+       
        
     }
 }

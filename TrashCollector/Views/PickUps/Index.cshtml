@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h1>IndexAsync</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -32,13 +32,13 @@
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model.customer)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach ( var item in Model) { 
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.PickUpDay)
@@ -59,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                @Html.DisplayFor(modelItem => item.customer.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PickUpId">Edit</a> |

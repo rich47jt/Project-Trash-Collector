@@ -18,11 +18,12 @@ namespace TrashCollector.Models
         public string StreetAddress { get; set; }
         public string City { get; set; }
         public int ZipCode { get; set; }
-        //public double Customer balace {get; set;}
-
+      
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+
+        
 
         
             

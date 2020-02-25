@@ -49,11 +49,11 @@
             @Html.DisplayFor(model => model.EndDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+            @Html.DisplayNameFor(model => model.customer)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
+            @Html.DisplayFor(model => model.customer.Id)
+        </dd class>
     </dl>
     
     <form asp-action="Delete">

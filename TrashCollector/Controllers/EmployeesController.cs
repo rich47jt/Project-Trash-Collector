@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,7 +36,7 @@ namespace TrashCollector.Controllers
             }
 
             var employee = await _context.Employees
-                .Include(e => e.IdentityUser)
+                .Include(e => e.IdentityUserId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -57,8 +58,11 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ZipCode,IdentityUserId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,Name,ZipCode,Confirmation,IdentityUserId")] Employee employee)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            employee.IdentityUserId = userId;
+
             if (ModelState.IsValid)
             {
                 _context.Add(employee);
@@ -91,7 +95,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ZipCode,IdentityUserId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ZipCode,Confirmation,IdentityUserId")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -154,40 +158,17 @@ namespace TrashCollector.Controllers
 
         private bool EmployeeExists(int id)
         {
+
             return _context.Employees.Any(e => e.Id == id);
         }
-
-        public IActionResult Collections(Customer customer,PickUp pickUp,int zip)
+        
+        public IActionResult Find( )
         {
-            _context.Employees.Where(e => e.ZipCode == zip);
-            if (customer.ZipCode == zip && pickUp.IsPickUp == true)
-            {
-                return View();
-                //return list of cusotmer name, balance ,and zip
-                //pickup day for each customer
-               
+           var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+           var thisemployee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+           return View(_context.Customers.Where(c => c.ZipCode == thisemployee.ZipCode).ToList());
 
-            }
-            else
-            {
-                //write no collections today
-            }
-            return View();
+            
         }
-
-        public IActionResult Confirmation(Customer customer, PickUp pickUp, int zip)
-        {
-
-            if (customer.ZipCode == zip && pickUp.IsPickUp == true)
-            {
-                return View();
-                //confirmation
-                //show client balance and add the charge that client 
-            }
-            //list of cliets that the employee now can approve there collection
-            return View();
-        }
-
-       
     }
 }

@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<TrashCollector.Models.Employee>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Find";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Find</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.ZipCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Confirmation) 
+                @Html.DisplayNameFor(model => model.Confirmation)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdentityUser)
