@@ -25,7 +25,7 @@ namespace TrashCollector.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return View(_context.PickUps.Where(p => p.CustomerId == thiscusomter.Id));
+            return View(_context.PickUps.Where(p =>p.CustomerId == thiscusomter.Id));
         }
 
         // GET: PickUps/Details/5
@@ -38,8 +38,8 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             var pickUp = await _context.PickUps
-                .Where( p=> p.customer == thiscusomter)
-                .FirstOrDefaultAsync(m => m.PickUpId == id);
+                .Where(p => p.CustomerId == thiscusomter.Id)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -49,10 +49,8 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Create
-        [HttpGet]
         public IActionResult Create()
         {
-            
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
             return View();
         }
@@ -62,19 +60,13 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,CustomerId")] PickUp pickUp)
+        public async Task<IActionResult> Create([Bind("Id,PickUpDay,Balance,Suspend,StartTime,EndDate,CustomerId")] PickUp pickUp)
         {
-            if (pickUp.IsPickUp == false)
-            {
-                pickUp.Balance = 0;
-            }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             pickUp.CustomerId = thiscusomter.Id;
             if (ModelState.IsValid)
             {
-             
-
                 _context.Add(pickUp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -83,13 +75,13 @@ namespace TrashCollector.Controllers
         }
 
         // GET: PickUps/Edit/5
-        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             id = thiscusomter.Id;
@@ -98,7 +90,6 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", pickUp.CustomerId);
             return View(pickUp);
         }
 
@@ -107,12 +98,12 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PickUpId,PickUpDay,IsPickUp,Balance,Suspend,StartDate,EndDate,CustomerId")] PickUp pickUp)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PickUpDay,Balance,Suspend,StartTime,EndDate,CustomerId")] PickUp pickUp)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            pickUp.customer = thiscusomter;
-            if (id != pickUp.PickUpId)
+            pickUp.CustomerId = thiscusomter.Id;
+            if (id != pickUp.Id)
             {
                 return NotFound();
             }
@@ -126,7 +117,7 @@ namespace TrashCollector.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PickUpExists(pickUp.PickUpId))
+                    if (!PickUpExists(pickUp.Id))
                     {
                         return NotFound();
                     }
@@ -137,12 +128,10 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", pickUp.CustomerId);
             return View(pickUp);
         }
 
         // GET: PickUps/Delete/5
-        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,8 +141,8 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             var pickUp = await _context.PickUps
-                .Where(p => p.customer == thiscusomter)
-                .FirstOrDefaultAsync(m => m.PickUpId == id);
+                .Where(p => p.CustomerId == thiscusomter.Id)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (pickUp == null)
             {
                 return NotFound();
@@ -167,9 +156,6 @@ namespace TrashCollector.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            
             var pickUp = await _context.PickUps.FindAsync(id);
             _context.PickUps.Remove(pickUp);
             await _context.SaveChangesAsync();
@@ -178,10 +164,7 @@ namespace TrashCollector.Controllers
 
         private bool PickUpExists(int id)
         {
-            return _context.PickUps.Any(e => e.PickUpId == id);
+            return _context.PickUps.Any(e => e.Id == id);
         }
-
-       
-   
     }
 }

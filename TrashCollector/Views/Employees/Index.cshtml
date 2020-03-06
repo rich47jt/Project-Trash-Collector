@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.ZipCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Confirmation) 
+                @Html.DisplayNameFor(model => model.Confirmation)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdentityUser)
@@ -40,15 +40,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Confirmation)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                <a asp-action="Find" asp-route-id="@item.Id">Find</a>
-            </td>
+            </td>*@
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>  |
+            <a asp-action="List" asp-route-id="@item.Id">List</a>
+        </td>
         </tr>
 }
     </tbody>

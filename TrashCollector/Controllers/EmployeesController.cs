@@ -21,10 +21,22 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task <IActionResult> Index()
         {
-            var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
+            var applicationDbContext = _context.Employees.Include(c => c.IdentityUser);
             return View(await applicationDbContext.ToListAsync());
+
+        }
+        public IActionResult List()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if (employee == null)
+            {
+                return RedirectToAction("Index", "Employee");
+            }
+             
+            return View(_context.Customers.Where(c => c.ZipCode == employee.ZipCode).ToList());
         }
 
         // GET: Employees/Details/5
@@ -36,7 +48,7 @@ namespace TrashCollector.Controllers
             }
 
             var employee = await _context.Employees
-                .Include(e => e.IdentityUserId)
+                .Include(e => e.IdentityUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -60,9 +72,6 @@ namespace TrashCollector.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ZipCode,Confirmation,IdentityUserId")] Employee employee)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            employee.IdentityUserId = userId;
-
             if (ModelState.IsValid)
             {
                 _context.Add(employee);
@@ -158,17 +167,9 @@ namespace TrashCollector.Controllers
 
         private bool EmployeeExists(int id)
         {
-
             return _context.Employees.Any(e => e.Id == id);
         }
-        
-        public IActionResult Find()
-        {
-           var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-           var thisemployee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
-           return View(_context.Customers.Where(c => c.ZipCode == thisemployee.ZipCode).ToList());
 
-            
-        }
+       
     }
 }

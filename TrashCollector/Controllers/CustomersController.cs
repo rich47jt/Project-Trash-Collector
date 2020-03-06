@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -49,7 +49,7 @@ namespace TrashCollector.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -60,9 +60,6 @@ namespace TrashCollector.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,StreetAddress,City,ZipCode,IdentityUserId")] Customer customer)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            customer.IdentityUserId = userId;
-
             if (ModelState.IsValid)
             {
                 _context.Add(customer);
@@ -160,5 +157,13 @@ namespace TrashCollector.Controllers
         {
             return _context.Customers.Any(e => e.Id == id);
         }
+
+        public async Task <IActionResult> Find()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var thiscusomter = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            return View(await _context.PickUps.Where(p => p.customer.Id == thiscusomter.Id).ToListAsync());
+        }
+        
     }
 }

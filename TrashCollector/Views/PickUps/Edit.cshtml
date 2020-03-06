@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Edit</h1>
@@ -12,17 +12,12 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PickUpId" />
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />*@
             <div class="form-group">
                 <label asp-for="PickUpDay" class="control-label"></label>
                 <input asp-for="PickUpDay" class="form-control" />
                 <span asp-validation-for="PickUpDay" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPickUp" /> @Html.DisplayNameFor(model => model.IsPickUp)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Balance" class="control-label"></label>
@@ -35,20 +30,20 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
                 <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
